@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini CRM — Lead Manager</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div id="login-page">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">MiniCRM</span>
+      </div>
+      <h1 class="login-title">Welcome back</h1>
+      <p class="login-sub">Sign in to manage your leads</p>
+      <div id="login-error" class="error-msg hidden">Invalid username or password</div>
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="login-username" placeholder="admin" autocomplete="username"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="btn-primary full" id="login-btn" onclick="doLogin()">Sign in</button>
+      <p class="login-hint">Default: admin / admin123</p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">MiniCRM</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="nav-item active" href="#">
+          <span class="nav-icon">⬡</span> All Leads
+        </a>
+      </nav>
+      <div class="sidebar-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="stat-total">0</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-new">0</span>
+          <span class="stat-label">New</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" id="stat-converted">0</span>
+          <span class="stat-label">Converted</span>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">↩ Sign out</button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+      <div class="top-bar">
+        <div>
+          <h2 class="page-title">Lead Management</h2>
+          <p class="page-sub">Track and manage all your client leads</p>
+        </div>
+        <button class="btn-primary" onclick="openModal()">+ Add Lead</button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <input type="text" id="search-input" placeholder="Search name or email..." oninput="renderTable()" />
+        <select id="filter-status" onchange="renderTable()">
+          <option value="">All Status</option>
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Converted">Converted</option>
+        </select>
+        <select id="filter-source" onchange="renderTable()">
+          <option value="">All Sources</option>
+          <option value="Website">Website</option>
+          <option value="Referral">Referral</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Email">Email</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table class="leads-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <tr><td colspan="7" class="empty-row">Loading leads...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD / EDIT MODAL -->
+  <div id="modal-overlay" class="hidden" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add New Lead</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <input type="hidden" id="lead-id" />
+      <div class="modal-body">
+        <div class="field-row">
+          <div class="field">
+            <label>Full Name *</label>
+            <input type="text" id="f-name" placeholder="John Doe" />
+          </div>
+          <div class="field">
+            <label>Email *</label>
+            <input type="email" id="f-email" placeholder="john@example.com" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Source</label>
+            <select id="f-source">
+              <option value="Website">Website</option>
+              <option value="Referral">Referral</option>
+              <option value="Social Media">Social Media</option>
+              <option value="Email">Email</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="f-status">
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Converted">Converted</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Follow-up Notes</label>
+          <textarea id="f-notes" rows="3" placeholder="Any notes about this lead..."></textarea>
+        </div>
+        <div id="modal-error" class="error-msg hidden">Please fill in all required fields.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveLead()">Save Lead</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
